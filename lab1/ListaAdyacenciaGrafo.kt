@@ -1,6 +1,6 @@
 class ListaAdyacenciaGrafo<T>(): Grafo<T>{
 
-    private val verticesLados = mutableMapOf<T, MutableList<T>>()
+    private val verticesLados = mutableMapOf<T, MutableSet<T>>()
 
     override fun tamano():Int = this.verticesLados.size
 
@@ -8,14 +8,14 @@ class ListaAdyacenciaGrafo<T>(): Grafo<T>{
 
     override fun agregarVertice(v:T): Boolean {
         if(contiene(v)) return false
-        verticesLados.put(v,mutableListOf<T>())
+        verticesLados.put(v,mutableSetOf<T>())
         return true
     }
 
     override fun conectar(desde:T,hasta:T): Boolean {
         if (!contiene(desde) || !contiene(hasta)) return false
-        if (verticesLados[desde]!!.contains(hasta)) return false
         verticesLados[desde]!!.add(hasta)
+        verticesLados[hasta]!!.add(desde)
         return true
     }
 
@@ -37,7 +37,7 @@ class ListaAdyacenciaGrafo<T>(): Grafo<T>{
 
     override fun obtenerArcosEntrada(v:T): List<T>{
         if(!contiene(v)) return listOf<T>()
-        var arcosEntrada: MutableList<T> = mutableListOf<T>()
+        var arcosEntrada: MutableSet<T> = mutableSetOf<T>()
         for ((vertice, arcos) in verticesLados){
             if (v in arcos){
                 arcosEntrada.add(vertice)
@@ -50,11 +50,10 @@ class ListaAdyacenciaGrafo<T>(): Grafo<T>{
         for(v in vertices){
             if(!(contiene(v))) return ListaAdyacenciaGrafo()
         }
-
         val subgrafo = ListaAdyacenciaGrafo<T>()
         for(v in vertices){
             val originales = this.verticesLados[v]
-            val copiaFiltrada: MutableList<T> = originales!!.filter {it in vertices}.toMutableList()
+            val copiaFiltrada: MutableSet<T> = originales!!.filter {it in vertices}.toMutableSet()
             subgrafo.verticesLados.put(v, copiaFiltrada)
         }
         return subgrafo
