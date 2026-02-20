@@ -3,11 +3,12 @@ import java.io.BufferedReader
 import kotlin.collections.mutableMapOf
 
 fun degreesOfSeparation (p1: String, p2: String, grafo: Grafo<String>): Int{
+    if(p1 == p2) return 0
+    if(!grafo.contiene(p1) || !grafo.contiene(p2)) return -1
+    
     val visitados = mutableMapOf<String,Boolean>()
     val predecesor = mutableMapOf<String,String>()
     val cola = ArrayDeque<String>()
-
-    if(p1 == p2) return 0
 
     cola.addLast(p1)
     while(cola.isNotEmpty()){
@@ -27,7 +28,6 @@ fun degreesOfSeparation (p1: String, p2: String, grafo: Grafo<String>): Int{
 fun contar (p2: String, predecesor: MutableMap<String,String> ): Int{
     var n = 1
     var v = predecesor[p2]
-
     while(v in predecesor){
         n = n + 1
         v = predecesor[v]

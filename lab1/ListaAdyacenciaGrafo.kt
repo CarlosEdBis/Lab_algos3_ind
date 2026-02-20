@@ -14,6 +14,7 @@ class ListaAdyacenciaGrafo<T>(): Grafo<T>{
 
     override fun conectar(desde:T,hasta:T): Boolean {
         if (!contiene(desde) || !contiene(hasta)) return false
+        if (verticesLados[desde]!!.contains(hasta)) return false
         verticesLados[desde]!!.add(hasta)
         return true
     }
