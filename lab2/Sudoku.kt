@@ -9,10 +9,11 @@ fun solSudoku(sudk: String){
 
     if (tablero[0][0] == -1) return
 
-    solSudokuRec(tablero)
+    val inicio = System.nanoTime()
+    solSudokuRec(tablero, 0, 0)
+    val fin = System.nanoTime()
+    println("Tiempo: ${fin - inicio} ns")
 
-    println("")
-    
     for (i in 0 until 9){
         for (j in 0 until 9){
             print(tablero[i][j])
@@ -21,8 +22,25 @@ fun solSudoku(sudk: String){
     println("")
 }
 
-fun solSudokuRec(tablero: Array<Array<Int>>){
-    
+fun solSudokuRec(tablero: Array<Array<Int>>, fil: Int, col: Int): Boolean{
+    if(fil == 9) return true
+
+    val nextFil = if (col == 8) fil + 1 else fil
+    val nextCol = if (col == 8) 0 else col + 1
+
+    if(tablero[fil][col] != 0){
+        if(solSudokuRec(tablero, nextFil, nextCol)) return true
+        return false
+    }
+
+    for (k in 1 until 10){
+        if (validarJugada(k, tablero, fil, col)){
+            tablero[fil][col] = k
+            if(solSudokuRec(tablero, nextFil, nextCol)) return true
+            tablero[fil][col] = 0
+        }
+    }
+    return false
 }
 
 fun crearTablero(sudk: String): Array<Array<Int>>{
@@ -34,12 +52,11 @@ fun crearTablero(sudk: String): Array<Array<Int>>{
             val n = sudk[m].digitToInt()
 
             if (n != 0 && validarJugada(n, tablero, i, j)){
-                tablero[i][j] = sudk[m].digitToInt()
+                tablero[i][j] = n
             } else if(n != 0){
                 println("NOSOLUTION")
                 return Array(1) { Array(1) { -1 } }
             }
-            println(m)
             m++
         }
     }
@@ -53,11 +70,18 @@ fun validarJugada(n: Int, tablero: Array<Array<Int>>, fil: Int, col: Int): Boole
     for(i in 0 until 9){
         if (tablero[i][col] == n) return false
     }
+
+    val inicioFil = (fil / 3) * 3
+    val inicioCol = (col / 3) * 3
+    for (i in 0 until 3){
+        for(j in 0 until 3){
+            if(tablero[inicioFil + i][inicioCol + j] == n) return false
+        }
+    }
     return true
 }
 
 
 fun main(args: Array<String>){
-    println(args[0])
     solSudoku(args[0])
 }
