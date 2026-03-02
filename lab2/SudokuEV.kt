@@ -27,7 +27,7 @@ fun solSudoku(sudk: String){
 }
 
 fun solSudokuRec(tablero: Array<Array<Celda>>): Boolean{
-    val celda = encontrarCeldaMRV(tablero) ?: return true
+    val celda = encontrarCelda(tablero) ?: return true
     val (fil, col) = celda
 
     for (k in tablero[fil][col].opciones.toList()){
@@ -81,7 +81,7 @@ fun validarJugada(n: Int, tablero: Array<Array<Celda>>, fil: Int, col: Int): Boo
     return true
 }
 
-fun encontrarCeldaMRV(tablero: Array<Array<Celda>>): Pair<Int, Int>?{
+fun encontrarCelda(tablero: Array<Array<Celda>>): Pair<Int, Int>?{
     var min: Pair<Int, Int>? = null
     var opc = 10
 

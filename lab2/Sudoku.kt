@@ -9,10 +9,10 @@ fun solSudoku(sudk: String){
 
     if (tablero[0][0] == -1) return
 
-    val inicio = System.nanoTime()
-    solSudokuRec(tablero, 0, 0)
-    val fin = System.nanoTime()
-    println("Tiempo: ${fin - inicio} ns")
+    if(!solSudokuRec(tablero, 0, 0)){
+        println("NOSOLUTION")
+        return
+    }
 
     for (i in 0 until 9){
         for (j in 0 until 9){
@@ -80,7 +80,6 @@ fun validarJugada(n: Int, tablero: Array<Array<Int>>, fil: Int, col: Int): Boole
     }
     return true
 }
-
 
 fun main(args: Array<String>){
     solSudoku(args[0])
